@@ -11,41 +11,7 @@ namespace StardustOS.SDSystem
     public static class ConfigMan
     {
         // Config Manager
-        // .cfg
-
-        public static Dictionary<string, string> Configs = new Dictionary<string, string>();
-
-        public static Dictionary<string, Dictionary<string, string>> CachedConfigs = new Dictionary<string, Dictionary<string, string>>();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <!-- <typeparam name="T">Supported types: int, int[] (Split ','), bool, bool[] (Split ','), byte, byte[] (ASCII -> Byte[]), string (Default), string[] (Split ',')</typeparam> -->
-        /// <param name="path"></param>
-        /// <param name="lowerCaseKeys"></param>
-        /// <returns></returns>
-        /*public static Dictionary<string, T> FetchConfig<T>(string path, bool lowerCaseKeys = false)
-        {
-            Dictionary<string, T> keyValuePairs = new Dictionary<string, T>();
-
-            string[] lines = File.ReadAllText(path).Split('\n');
-
-            foreach (string line in lines)
-            {
-                string[] split = line.Split('=');
-
-                switch (typeof(T).Name)
-                {
-                    case "Int32":
-                        keyValuePairs.Add(lowerCaseKeys ? split[0].ToLower() : split[0], int.Parse(split[1]));
-                        break;
-                }
-
-                //keyValuePairs.Add(lowerCaseKeys ? split[0].ToLower() : split[0], (T)Convert.ChangeType(split[1], typeof(T)));
-            }
-
-            return keyValuePairs;
-        }*/
+        // .cfg files
 
         public static Dictionary<string, string> FetchConfig(string path, bool lowerCaseKeys = false)
         {
