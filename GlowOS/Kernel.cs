@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GlowOS.Resources;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Sys = Cosmos.System;
@@ -11,7 +12,7 @@ namespace GlowOS
         protected override void BeforeRun()
         {
             Console.WriteLine("Welcome to GlowOS!");
-            
+            Initializer.InitializeAllResources();
         }
 
         protected override void Run()
