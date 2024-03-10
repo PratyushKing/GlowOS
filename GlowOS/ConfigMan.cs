@@ -15,6 +15,8 @@ namespace StardustOS.SDSystem
 
         public static Dictionary<string, string> FetchConfig(string path, bool lowerCaseKeys = false)
         {
+            if(!File.Exists(path)) return new Dictionary<string, string>();
+
             Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
 
             string[] lines = File.ReadAllLines(path);
