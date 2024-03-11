@@ -51,6 +51,7 @@ namespace GlowOS.Core
                 return;
 
             for (double Angle = startAngle; Angle < endAngle; Angle += 0.5) {
+                
                 double Angle1 = Math.PI * Angle / 180;
                 int ix = (int)Math.Clamp(width * Math.Cos(Angle1), - width + 1, width - 1);
                 int iy = (int)Math.Clamp(height * Math.Sin(Angle1), - height + 1, height - 1);

@@ -104,5 +104,15 @@ namespace GlowOS.Core
                 MouseManager.Update();
             }
         }
+
+        public class GlowOSDesktopUI : Process
+        {
+            public GlowOSDesktopUI()
+            {
+                name = "GlowOS_DesktopUI";
+                description = "GlowOS_DesktopUI includes handling the top and bottom menu.";
+                pid = 2; // the pid's needed to be hard-coded due to the process list being generated before the the variable
+            }
+        }
     }
 }
