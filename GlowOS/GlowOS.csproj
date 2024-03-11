@@ -26,11 +26,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Resources\Bitmaps\background.bmp" />
+      <None Remove="Resources\Bitmaps\cursor.bmp" />
       <None Remove="Resources\Quicksand-Bold.ttf" />
       <None Remove="Resources\Quicksand-Regular.ttf" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Resources\Bitmaps\background.bmp" />
+      <EmbeddedResource Include="Resources\Bitmaps\cursor.bmp" />
       <EmbeddedResource Include="Resources\Quicksand-Bold.ttf" />
       <EmbeddedResource Include="Resources\Quicksand-Regular.ttf" />
     </ItemGroup>

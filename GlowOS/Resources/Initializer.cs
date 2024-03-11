@@ -1,4 +1,5 @@
-﻿using CosmosTTF;
+﻿using Cosmos.System.Graphics;
+using CosmosTTF;
 using IL2CPU.API.Attribs;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace GlowOS.Resources
         {
             ResourceMgr.mainRegularFont = new(ResourceMgr.mainRegularFont_raw);
             ResourceMgr.mainBoldFont = new(ResourceMgr.mainBoldFont_raw);
+
+            ResourceMgr.background = new(ResourceMgr.background_raw);
+            ResourceMgr.cursor = new(ResourceMgr.cursor_raw);
         }
     }
 }
@@ -29,5 +33,11 @@ namespace GlowOS
 
         [ManifestResourceStream(ResourceName = "GlowOS.Resources.Quicksand-Regular.ttf")] public static byte[] mainRegularFont_raw;
         public static TTFFont mainRegularFont;
+
+        [ManifestResourceStream(ResourceName = "GlowOS.Resources.Bitmaps.background.bmp")] public static byte[] background_raw;
+        public static Bitmap background;
+
+        [ManifestResourceStream(ResourceName = "GlowOS.Resources.Bitmaps.cursor.bmp")] public static byte[] cursor_raw;
+        public static Bitmap cursor;
     }
 }
