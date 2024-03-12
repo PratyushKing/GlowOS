@@ -94,10 +94,28 @@ namespace GlowOS.Core
 
         public void Clear(Color color)
         {
-            MemoryOperations.Fill(data.RawData, color.ToArgb());
+            for (int cx = 0; cx < width; cx++)
+            {
+                for (int cy = 0; cy < height; cy++)
+                {
+                    this[cx, cy] = color;
+                }
+            }
         }
 
         public void Clear() => Clear(Color.Black);
+
+        public void FillPos(Color color, int x, int y, int width, int height)
+        {
+            // basically clear but only a specific portion of the canvas.
+            for (int cx = x; cx < width; cx++)
+            {
+                for (int cy = y; cy < height; cy++)
+                {
+                    this[cx, cy] = color;
+                }
+            }
+        }
 
         public void DrawPoint(Color color, int x, int y) => this[x, y] = color;
         
@@ -132,6 +150,73 @@ namespace GlowOS.Core
 
                 DrawPoint(color, x + ix, y + iy);
             }
+        }
+
+        public void DrawFilledRectangle(Color color, int x, int y, int width, int height, int radius)
+        {
+            // If its a direct rectangle with no alpha colors and border radius, use the "super-saiyan-fast" copy buffer method
+            if (color.A == 255 && radius == 0)
+            {
+                int startX = Math.Max(x, 0);
+                int startY = Math.Max(y, 0);
+                int endX = Math.Min(x + width, this.width);
+                int endY = Math.Min(y + height, this.height);
+
+                // crop it and find size
+                int croppedHeight = endY - startY;
+                int croppedWidth = endX - startX;
+
+                // get the final pos offset for the starting point?? man wtf is this blog
+                int destination = (startY * this.width) + startX;
+                FillPos(color, startX, startY, croppedWidth, croppedHeight);
+
+                return; // so it doesnt redraw others
+            }
+
+            // If needs alpha but there's no radius.
+            if (radius == 0)
+            {
+                // Cannot use FillPos here due to the calculation required every frame.
+                int cx = 0, cy = 0;
+                for (int cp = 0; cp < width * height; cp++) // cp = current pos
+                {
+                    cx = cp % width;
+                    cy = cp / width;
+                    this[x + cx, y + cy] = color;
+                }
+                return;
+            }
+
+            // If there's corner bordering then just use circles for corners :skull:
+            // Also, no if statement is required cuz it returns if radius is 0 and its able to draw.
+
+            // CASE 1: if height is twice the radius then only 2 circles.
+            if (height == radius * 2)
+            {
+                // DrawFilledCircle (color) (x + radius) (y + radius) (radius)
+                // DrawFilledCircle (color) (x + width + radius) (y + radius) (radius)
+                DrawFilledRectangle(color, x + radius, y, width, height, 0); // oh am i a such a great genius.
+                return; // so it doesnt overlap
+            }
+            
+            // CASE 2: if width is twice the radius then also.... only 2 circles
+            if (width == radius * 2)
+            {
+                // DrawFilledCircle(X + Radius, Y + Radius, Radius, Color);
+                // DrawFilledCircle(X + Width + Radius, Y + Radius, Radius, Color);
+                DrawFilledRectangle(color, x, y + radius, width, height, 0);
+                return; // so it doesnt overlap
+            }
+
+            // CASE 3: where there's enough space to properly draw a rounded rectangle.
+            DrawFilledCircle(color, x + radius, y + radius, radius);
+            DrawFilledCircle(color, x + width - radius - 1, y + radius, radius);
+
+            DrawFilledCircle(color, x + radius, y + height - radius - 1, radius);
+            DrawFilledCircle(x + width - radius - 1, y + height - radius - 1, radius, color);
+
+            DrawFilledRectangle(color, x + radius, y, width - (radius * 2), height, 0);
+            DrawFilledRectangle(color, x, y + radius, width, height - (radius * 2), 0);
         }
     }
 }

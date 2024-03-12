@@ -5,6 +5,7 @@ using GlowOS.Resources;
 using StardustOS.SDSystem;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using Sys = Cosmos.System;
@@ -66,8 +67,8 @@ namespace GlowOS
             canvas = FullScreenCanvas.GetFullScreenCanvas(new(Width, Height, ColorDepth.ColorDepth32));
             canvas.DrawImage(ResourceMgr.background, 0, 0);
             UpperMenu.PrepareBuffer();
-            glowCanvas = new(15, 15);
-            glowCanvas.Clear(System.Drawing.Color.AliceBlue);
+            glowCanvas = new(150, 150, Color.Blue);
+            glowCanvas.DrawFilledRectangle(Color.Blue, 20, 20, 70, 40, 5);
             glowCanvas.DrawLine(System.Drawing.Color.White, 1, 1, 15, 1);
         }
 
