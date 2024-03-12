@@ -218,5 +218,15 @@ namespace GlowOS.Core
             DrawFilledRectangle(color, x + radius, y, width - (radius * 2), height, 0);
             DrawFilledRectangle(color, x, y + radius, width, height - (radius * 2), 0);
         }
+
+        private void DrawFilledCircle(int v1, int v2, int radius, Color color)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void DrawFilledCircle(Color color, int v1, int v2, int radius)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }
