@@ -66,15 +66,19 @@ namespace GlowOS
             canvas = FullScreenCanvas.GetFullScreenCanvas(new(Width, Height, ColorDepth.ColorDepth32));
             canvas.DrawImage(ResourceMgr.background, 0, 0);
             UpperMenu.PrepareBuffer();
+            glowCanvas = new(15, 15);
+            glowCanvas.Clear(System.Drawing.Color.AliceBlue);
+            glowCanvas.DrawLine(System.Drawing.Color.White, 1, 1, 15, 1);
         }
 
         public static int framesCount = 0;
-
+        public GlowCanvas glowCanvas;
         protected override void Run()
         {
             if (framesCount % 6 == 0)
                 canvas.DrawImage(ResourceMgr.background, 0, 0);
 
+            canvas.DrawImageAlpha(glowCanvas.data, 50, 40);
             ProcessManager.Update();
             canvas.Display();
         }
