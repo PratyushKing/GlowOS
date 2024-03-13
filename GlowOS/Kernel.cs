@@ -69,9 +69,15 @@ namespace GlowOS
                 canvas = FullScreenCanvas.GetFullScreenCanvas(new(Width, Height, ColorDepth.ColorDepth32));
                 canvas.DrawImage(ResourceMgr.background, 0, 0);
                 UpperMenu.PrepareBuffer();
-                glowCanvas = new(150, 150, Color.Blue);
-                glowCanvas.DrawFilledRectangle(Color.Red, 10, 10, 40, 40, 10);
+                TaskBar.PrepareBuffer();
+                //glowCanvas = new(150, 150, Color.Blue);
+                glowCanvas = new(500, 500, Color.Blue);
+                glowCanvas.DrawFilledRectangle(Color.Red, 20, 20, 70, 40, 5);
                 glowCanvas.DrawLine(Color.White, 1, 1, 15, 1);
+
+                glowCanvas.DrawBitmap(ResourceMgr.cursor, 10, 10);
+                glowCanvas.DrawFilledCircle(Color.White, 100, 100, 10);
+                glowCanvas.DrawFilledRectangle(Color.Red, 200, 20, 70, 40, 0);
             } catch (Exception ex)
             {
                 canvas.Disable();
@@ -141,6 +147,11 @@ namespace GlowOS
             canvas.DrawImageAlpha(glowCanvas.data, 50, 40);
             ProcessManager.Update();
             canvas.Display();
+
+            if(framesCount % 2 == 0)
+            {
+                Heap.Collect();
+            }
         }
 
         protected override void AfterRun() // only for emergencies or extreme fuck-ups

@@ -217,6 +217,23 @@ namespace GlowOS.Core
             DrawFilledRectangle(color, x, y + radius, width, height - (radius * 2), 0);
         }
 
+        public void DrawRectangle(int X, int Y, ushort Width, ushort Height, ushort Radius, Color Color)
+        {
+            // Draw circles to add curvature if needed.
+            if (Radius > 0)
+            {
+                DrawArc(Color, Radius + X, Radius + Y, Radius,  180, 270); // Top left
+                DrawArc(Color, X + Width - Radius, Y + Height - Radius, Radius, 0, 90); // Bottom right
+                DrawArc(Color, Radius + X, Y + Height - Radius, Radius, 90, 180); // Bottom left
+                DrawArc(Color, X + Width - Radius, Radius + Y, Radius, 270, 360);
+            }
+
+            DrawLine(Color, X + Radius, Y, X + Width - Radius, Y); // Top Line
+            DrawLine(Color, X + Radius, Y + Height, X + Width - Radius, Height + Y); // Bottom Line
+            DrawLine(Color, X, Y + Radius, X, Y + Height - Radius); // Left Line
+            DrawLine(Color, X + Width, Y + Radius, Width + X, Y + Height - Radius); // Right Line
+        }
+
         public void DrawFilledCircle(Color color, int x, int y, int radius)
         {
             if (radius == 0)
@@ -230,5 +247,24 @@ namespace GlowOS.Core
                     this[ix + x, iy + y] = color;
             }
         }
+
+        public void DrawString(string text, Color color, int x, int y, int size, bool UseTTF = true)
+        {
+            // TODO
+        }
+
+        public void DrawBitmap(Bitmap bitmap, int x, int y)
+        {
+            for (int by = 0; by < bitmap.Height; by++)
+            {
+                for (int bx = 0; bx < bitmap.Width; bx++)
+                {
+                    this[x + bx, y + by] = Color.FromArgb(bitmap.RawData[(by * bitmap.Width) + bx]);
+                }
+            }
+        }
+
+        public Color IntToColor(int ARGB) => Color.FromArgb(ARGB);
+        public int ColorToInt(Color color) => color.ToArgb();
     }
 }
