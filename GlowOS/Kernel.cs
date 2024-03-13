@@ -70,7 +70,7 @@ namespace GlowOS
                 canvas.DrawImage(ResourceMgr.background, 0, 0);
                 UpperMenu.PrepareBuffer();
                 glowCanvas = new(150, 150, Color.Blue);
-                glowCanvas.DrawFilledRectangle(Color.Blue, 20, 20, 70, 40, 5);
+                glowCanvas.DrawFilledRectangle(Color.Red, 20, 20, 70, 40, 5);
                 glowCanvas.DrawLine(Color.White, 1, 1, 15, 1);
             } catch (Exception ex)
             {
@@ -82,23 +82,19 @@ namespace GlowOS
 
                 Console.ReadKey();
             }
-        }
 
-        public static int framesCount = 0;
-        public GlowCanvas glowCanvas;
-        protected override void Run()
-        {
+            // try once so if it works, it works or just then and there quits.
             try
             {
-                canvas.DrawString(framesCount.ToString(), Sys.Graphics.Fonts.PCScreenFont.Default, Color.White, 10, 10);
+                canvas.DrawImage(ResourceMgr.background, 0, 0);
 
-                if (framesCount % 6 == 0)
-                    canvas.DrawImage(ResourceMgr.background, 0, 0);
-
+                Update();
+                canvas.DrawString(FPS.ToString(), Sys.Graphics.Fonts.PCScreenFont.Default, Color.White, 10, 10);
                 canvas.DrawImageAlpha(glowCanvas.data, 50, 40);
                 ProcessManager.Update();
                 canvas.Display();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 canvas.Disable();
 
@@ -108,6 +104,43 @@ namespace GlowOS
 
                 Console.ReadKey();
             }
+        }
+
+        public static int LastS = -1;
+        public static int Ticken = 0;
+
+        public static int useMode = 0;
+
+        public static void Update()
+        {
+            if (LastS == -1)
+            {
+                LastS = DateTime.UtcNow.Second;
+            }
+            if (DateTime.UtcNow.Second - LastS != 0)
+            {
+                if (DateTime.UtcNow.Second > LastS)
+                {
+                    FPS = Ticken / (DateTime.UtcNow.Second - LastS);
+                }
+                LastS = DateTime.UtcNow.Second;
+                Ticken = 0;
+            }
+            Ticken++;
+        }
+
+        public static int framesCount = 0;
+        public static int FPS = 0;
+        public GlowCanvas glowCanvas;
+        protected override void Run()
+        {
+            canvas.DrawImage(ResourceMgr.background, 0, 0);
+
+            Update();
+            canvas.DrawString(FPS.ToString(), Sys.Graphics.Fonts.PCScreenFont.Default, Color.White, 10, 10);
+            canvas.DrawImageAlpha(glowCanvas.data, 50, 40);
+            ProcessManager.Update();
+            canvas.Display();
         }
 
         protected override void AfterRun() // only for emergencies or extreme fuck-ups

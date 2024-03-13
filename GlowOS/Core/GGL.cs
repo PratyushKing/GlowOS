@@ -193,8 +193,8 @@ namespace GlowOS.Core
             // CASE 1: if height is twice the radius then only 2 circles.
             if (height == radius * 2)
             {
-                // DrawFilledCircle (color) (x + radius) (y + radius) (radius)
-                // DrawFilledCircle (color) (x + width + radius) (y + radius) (radius)
+                DrawFilledCircle(color, x + radius, y + radius, radius);
+                DrawFilledCircle(color, x + width + radius, y + radius, radius);
                 DrawFilledRectangle(color, x + radius, y, width, height, 0); // oh am i a such a great genius.
                 return; // so it doesnt overlap
             }
@@ -202,8 +202,8 @@ namespace GlowOS.Core
             // CASE 2: if width is twice the radius then also.... only 2 circles
             if (width == radius * 2)
             {
-                // DrawFilledCircle(X + Radius, Y + Radius, Radius, Color);
-                // DrawFilledCircle(X + Width + Radius, Y + Radius, Radius, Color);
+                DrawFilledCircle(color, x + radius, y + radius, radius);
+                DrawFilledCircle(color, x + width + radius, y + radius, radius);
                 DrawFilledRectangle(color, x, y + radius, width, height, 0);
                 return; // so it doesnt overlap
             }
@@ -219,14 +219,18 @@ namespace GlowOS.Core
             DrawFilledRectangle(color, x, y + radius, width, height - (radius * 2), 0);
         }
 
-        private void DrawFilledCircle(int v1, int v2, int radius, Color color)
+        public void DrawFilledCircle(Color color, int x, int y, int radius)
         {
-            //throw new NotImplementedException();
-        }
+            if (radius == 0)
+                return;
 
-        private void DrawFilledCircle(Color color, int v1, int v2, int radius)
-        {
-            //throw new NotImplementedException();
+            for (int ix = -radius; ix < radius; ix++)
+            {
+                int height = (int)Math.Sqrt((radius ^ 2) - (ix ^ 2));
+
+                for (int iy = -height; iy < height; iy++)
+                    this[ix + x, iy + y] = color;
+            }
         }
     }
 }
