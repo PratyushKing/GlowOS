@@ -2,9 +2,19 @@
 
 namespace GlowOS.Core
 {
-    public static class GlowColors
+    public class GlowColors
     {
+        public Color this[GlowColor color]
+        {
+            get { return colorList[(int)color]; }
+            set { }
+        }
+
         private static GlowTheme currentTheme = GlowTheme.Dark;
+
+        private static Color[] colorList = new Color[23] { FaintRed, LightRed, Pink, Purple, Red, DarkRed, Orange, Yellow, Green, Turquoise, Sky, Sapphire,
+                                                          Blue, Lavender, Text, SubText1, SubText2, MainSurface, Surface1, Surface2, MainOverlay, Overlay1,
+                                                          Overlay2 };
 
         public static Color FaintRed = Color.FromArgb(245, 224, 220);
         public static Color LightRed = Color.FromArgb(242, 205, 205);
@@ -60,5 +70,39 @@ namespace GlowOS.Core
     {
         Dark,
         Light
+    }
+
+    public enum GlowColor
+    {
+        FaintRed,
+        LightRed,
+        Pink,
+        Purple,
+        Red,
+        DarkRed,
+
+        Orange,
+        Yellow,
+
+        Green,
+        
+        Turquoise,
+        Sky,
+        Sapphire,
+        Blue,
+        Lavender,
+
+        Text,
+        SubText0,
+        SubText1,
+        SubText2,
+
+        MainSurface,
+        Surface1,
+        Surface2,
+
+        MainOverlay,
+        Overlay1,
+        Overlay2
     }
 }
