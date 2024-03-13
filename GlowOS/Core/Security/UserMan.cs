@@ -16,9 +16,11 @@ namespace GlowOS.Core.Security
 
         public bool AttemptLogin(string username, string password)
         {
+            CurrentUser = new User();
+            if (!CurrentUser.LoadUser(username)) return false;
+            if (!CurrentUser.AttemptLogin(username, password)) return false;
 
-
-            return false;
+            return true;
         }
     }
 }
