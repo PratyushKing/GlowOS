@@ -60,28 +60,54 @@ namespace GlowOS
                 Console.WriteLine($"{item.Key}={item.Value}");
             }
 
-            Sys.MouseManager.ScreenWidth = Width;
-            Sys.MouseManager.ScreenHeight = Height;
-            Sys.MouseManager.X = (Width / 2) - ResourceMgr.cursor.Width;
-            Sys.MouseManager.Y = (Height / 2) - ResourceMgr.cursor.Height;
-            canvas = FullScreenCanvas.GetFullScreenCanvas(new(Width, Height, ColorDepth.ColorDepth32));
-            canvas.DrawImage(ResourceMgr.background, 0, 0);
-            UpperMenu.PrepareBuffer();
-            glowCanvas = new(150, 150, Color.Blue);
-            glowCanvas.DrawFilledRectangle(Color.Blue, 20, 20, 70, 40, 5);
-            glowCanvas.DrawLine(System.Drawing.Color.White, 1, 1, 15, 1);
+            try
+            {
+                Sys.MouseManager.ScreenWidth = Width;
+                Sys.MouseManager.ScreenHeight = Height;
+                Sys.MouseManager.X = (Width / 2) - ResourceMgr.cursor.Width;
+                Sys.MouseManager.Y = (Height / 2) - ResourceMgr.cursor.Height;
+                canvas = FullScreenCanvas.GetFullScreenCanvas(new(Width, Height, ColorDepth.ColorDepth32));
+                canvas.DrawImage(ResourceMgr.background, 0, 0);
+                UpperMenu.PrepareBuffer();
+                glowCanvas = new(150, 150, Color.Blue);
+                glowCanvas.DrawFilledRectangle(Color.Blue, 20, 20, 70, 40, 5);
+                glowCanvas.DrawLine(Color.White, 1, 1, 15, 1);
+            } catch (Exception ex)
+            {
+                canvas.Disable();
+
+                Console.Clear();
+                Console.WriteLine("=== Kernal panic ===");
+                Console.WriteLine(ex.Message);
+
+                Console.ReadKey();
+            }
         }
 
         public static int framesCount = 0;
         public GlowCanvas glowCanvas;
         protected override void Run()
         {
-            if (framesCount % 6 == 0)
-                canvas.DrawImage(ResourceMgr.background, 0, 0);
+            try
+            {
+                canvas.DrawString(framesCount.ToString(), Sys.Graphics.Fonts.PCScreenFont.Default, Color.White, 10, 10);
 
-            canvas.DrawImageAlpha(glowCanvas.data, 50, 40);
-            ProcessManager.Update();
-            canvas.Display();
+                if (framesCount % 6 == 0)
+                    canvas.DrawImage(ResourceMgr.background, 0, 0);
+
+                canvas.DrawImageAlpha(glowCanvas.data, 50, 40);
+                ProcessManager.Update();
+                canvas.Display();
+            } catch (Exception ex)
+            {
+                canvas.Disable();
+
+                Console.Clear();
+                Console.WriteLine("=== Kernal panic ===");
+                Console.WriteLine(ex.Message);
+
+                Console.ReadKey();
+            }
         }
 
         protected override void AfterRun() // only for emergencies or extreme fuck-ups
