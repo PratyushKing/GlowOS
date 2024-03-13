@@ -166,8 +166,6 @@ namespace GlowOS.Core
                 int croppedHeight = endY - startY;
                 int croppedWidth = endX - startX;
 
-                // get the final pos offset for the starting point?? man wtf is this blog
-                int destination = (startY * this.width) + startX;
                 FillPos(color, startX, startY, croppedWidth, croppedHeight);
 
                 return; // so it doesnt redraw others
@@ -177,7 +175,7 @@ namespace GlowOS.Core
             if (radius == 0)
             {
                 // Cannot use FillPos here due to the calculation required every frame.
-                int cx = 0, cy = 0;
+                int cx, cy;
                 for (int cp = 0; cp < width * height; cp++) // cp = current pos
                 {
                     cx = cp % width;
@@ -226,7 +224,7 @@ namespace GlowOS.Core
 
             for (int ix = -radius; ix < radius; ix++)
             {
-                int height = (int)Math.Sqrt((radius ^ 2) - (ix ^ 2));
+                int height = (int)Math.Sqrt((radius * radius) - (ix * ix));
 
                 for (int iy = -height; iy < height; iy++)
                     this[ix + x, iy + y] = color;

@@ -70,7 +70,7 @@ namespace GlowOS
                 canvas.DrawImage(ResourceMgr.background, 0, 0);
                 UpperMenu.PrepareBuffer();
                 glowCanvas = new(150, 150, Color.Blue);
-                glowCanvas.DrawFilledRectangle(Color.Red, 20, 20, 70, 40, 5);
+                glowCanvas.DrawFilledRectangle(Color.Red, 10, 10, 40, 40, 10);
                 glowCanvas.DrawLine(Color.White, 1, 1, 15, 1);
             } catch (Exception ex)
             {
