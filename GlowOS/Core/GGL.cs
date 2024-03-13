@@ -232,5 +232,10 @@ namespace GlowOS.Core
                     this[ix + x, iy + y] = color;
             }
         }
+
+        public void DrawString(string text, Color color, int x, int y, int size, bool UseTTF = true)
+        {
+            // TODO
+        }
     }
 }
