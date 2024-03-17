@@ -1,5 +1,6 @@
 ﻿using Cosmos.Core;
 using Cosmos.System.Graphics;
+using CosmosTTF;
 using System;
 using System.Drawing;
 
@@ -87,7 +88,7 @@ namespace GlowOS.Core
                 return target;
             if (target.A == 0)
                 return source;
-            
+
             // basic color blending algorithm (mostly) by Ivan Sutherland
             return Color.FromArgb(255, (int)target.R + (int)(source.R * target.A) >> 8, (int)target.G + (int)(source.G * target.A) >> 8, (int)target.B + (int)(source.B * target.A) >> 8);
         }
@@ -118,7 +119,7 @@ namespace GlowOS.Core
         }
 
         public void DrawPoint(Color color, int x, int y) => this[x, y] = color;
-        
+
         public void DrawLine(Color color, int x1, int y1, int x2, int y2)
         {
             // Calculations done via the help of Bresenham's line drawing algorithm
@@ -142,11 +143,12 @@ namespace GlowOS.Core
             if (width == 0 || height == 0)
                 return;
 
-            for (double Angle = startAngle; Angle < endAngle; Angle += 0.5) {
-                
+            for (double Angle = startAngle; Angle < endAngle; Angle += 0.5)
+            {
+
                 double Angle1 = Math.PI * Angle / 180;
-                int ix = (int)Math.Clamp(width * Math.Cos(Angle1), - width + 1, width - 1);
-                int iy = (int)Math.Clamp(height * Math.Sin(Angle1), - height + 1, height - 1);
+                int ix = (int)Math.Clamp(width * Math.Cos(Angle1), -width + 1, width - 1);
+                int iy = (int)Math.Clamp(height * Math.Sin(Angle1), -height + 1, height - 1);
 
                 DrawPoint(color, x + ix, y + iy);
             }
@@ -196,7 +198,7 @@ namespace GlowOS.Core
                 DrawFilledRectangle(color, x + radius, y, width, height, 0); // oh am i a such a great genius.
                 return; // so it doesnt overlap
             }
-            
+
             // CASE 2: if width is twice the radius then also.... only 2 circles
             if (width == radius * 2)
             {
@@ -222,7 +224,7 @@ namespace GlowOS.Core
             // Draw circles to add curvature if needed.
             if (Radius > 0)
             {
-                DrawArc(Color, Radius + X, Radius + Y, Radius,  180, 270); // Top left
+                DrawArc(Color, Radius + X, Radius + Y, Radius, 180, 270); // Top left
                 DrawArc(Color, X + Width - Radius, Y + Height - Radius, Radius, 0, 90); // Bottom right
                 DrawArc(Color, Radius + X, Y + Height - Radius, Radius, 90, 180); // Bottom left
                 DrawArc(Color, X + Width - Radius, Radius + Y, Radius, 270, 360);
@@ -248,9 +250,40 @@ namespace GlowOS.Core
             }
         }
 
-        public void DrawString(string text, Color color, int x, int y, int size, bool UseTTF = true)
+        public void DrawCircle(Color color, int x, int y, int radius)
         {
-            // TODO
+            int ix = 0, iy = radius, dp = 3 - (2 * radius);
+
+            while (iy >= ix)
+            {
+                this[x + ix, y + iy] = color;
+                this[x - ix, y + iy] = color;
+                this[x + ix, y - iy] = color;
+                this[x - ix, y - iy] = color;
+                this[x + iy, y + ix] = color;
+                this[x - iy, y + ix] = color;
+                this[x + iy, y - ix] = color;
+                this[x - iy, y - ix] = color;
+
+                ix++;
+
+                if (dp > 0)
+                {
+                    iy--;
+                    dp += (4 * (ix - iy)) + 10;
+                }
+                else
+                {
+                    dp += (4 * ix) + 6;
+                }
+            }
+        }
+
+        public void DrawTriangle(Color color, int x1, int y1, int x2, int y2, int x3, int y3)
+        {
+            DrawLine(color, x1, y1, x2, y2);
+            DrawLine(color, x1, x1, x3, y3);
+            DrawLine(color, x2, y2, x3, y3);
         }
 
         public void DrawBitmap(Bitmap bitmap, int x, int y)
@@ -264,7 +297,29 @@ namespace GlowOS.Core
             }
         }
 
+        public void DrawString(Color color, string text, int size, int x, int y, SystemFonts font)
+        {
+            CTTFGGLS currentSurface = new(this);
+            switch (font)
+            {
+                case SystemFonts.generalText:
+                    ResourceMgr.mainRegularFont.DrawToSurface(currentSurface, size, x, y, text, color);
+                    return;
+                case SystemFonts.generalText_Bold:
+                    ResourceMgr.mainBoldFont.DrawToSurface(currentSurface, size, x, y, text, color);
+                    return;
+                default:
+                    return;
+            }
+        }
+
         public Color IntToColor(int ARGB) => Color.FromArgb(ARGB);
         public int ColorToInt(Color color) => color.ToArgb();
+    }
+
+    public enum SystemFonts
+    {
+        generalText,
+        generalText_Bold
     }
 }

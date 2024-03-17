@@ -70,20 +70,30 @@ namespace GlowOS
                 canvas.DrawImage(ResourceMgr.background, 0, 0);
                 UpperMenu.PrepareBuffer();
                 TaskBar.PrepareBuffer();
-                //glowCanvas = new(150, 150, Color.Blue);
-                glowCanvas = new(500, 500, Color.Blue);
-                glowCanvas.DrawFilledRectangle(Color.Red, 20, 20, 70, 40, 5);
-                glowCanvas.DrawLine(Color.White, 1, 1, 15, 1);
-
-                glowCanvas.DrawBitmap(ResourceMgr.cursor, 10, 10);
-                glowCanvas.DrawFilledCircle(Color.White, 100, 100, 10);
-                glowCanvas.DrawFilledRectangle(Color.Red, 200, 20, 70, 40, 0);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 canvas.Disable();
 
                 Console.Clear();
                 Console.WriteLine("=== Kernal panic ===");
+                Console.WriteLine(ex.Message);
+
+                Console.ReadKey();
+            }
+
+            try
+            {
+                glowCanvas = new(500, 500, Color.Blue);
+                glowCanvas.Clear(Color.Green);
+                glowCanvas.DrawFilledRectangle(Color.Pink, 200, 20, 70, 40, 0);
+
+            } catch (Exception ex)
+            {
+                canvas.Disable();
+
+                Console.Clear();
+                Console.WriteLine("=== Kernal Panic ===");
                 Console.WriteLine(ex.Message);
 
                 Console.ReadKey();
@@ -103,26 +113,21 @@ namespace GlowOS
             catch (Exception ex)
             {
                 canvas.Disable();
-
+                
                 Console.Clear();
                 Console.WriteLine("=== Kernal panic ===");
                 Console.WriteLine(ex.Message);
 
                 Console.ReadKey();
             }
+            LastS = DateTime.UtcNow.Second;
         }
 
         public static int LastS = -1;
         public static int Ticken = 0;
 
-        public static int useMode = 0;
-
         public static void Update()
         {
-            if (LastS == -1)
-            {
-                LastS = DateTime.UtcNow.Second;
-            }
             if (DateTime.UtcNow.Second - LastS != 0)
             {
                 if (DateTime.UtcNow.Second > LastS)
@@ -137,21 +142,16 @@ namespace GlowOS
 
         public static int framesCount = 0;
         public static int FPS = 0;
-        public GlowCanvas glowCanvas;
+        public GlowCanvas glowCanvas = new(500, 500);
         protected override void Run()
         {
             canvas.DrawImage(ResourceMgr.background, 0, 0);
 
             Update();
             canvas.DrawString(FPS.ToString(), Sys.Graphics.Fonts.PCScreenFont.Default, Color.White, 10, 10);
-            canvas.DrawImageAlpha(glowCanvas.data, 50, 40);
-            ProcessManager.Update();
+            canvas.DrawImageAlpha(glowCanvas.data, 50, 50);
+            //ProcessManager.Update();
             canvas.Display();
-
-            if(framesCount % 2 == 0)
-            {
-                Heap.Collect();
-            }
         }
 
         protected override void AfterRun() // only for emergencies or extreme fuck-ups

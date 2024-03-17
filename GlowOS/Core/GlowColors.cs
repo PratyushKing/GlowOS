@@ -10,11 +10,13 @@ namespace GlowOS.Core
             set { }
         }
 
+        public static Color getColor(GlowColor color) { return colorList[(int)color]; }
+
         private static GlowTheme currentTheme = GlowTheme.Dark;
 
-        private static Color[] colorList = new Color[23] { FaintRed, LightRed, Pink, Purple, Red, DarkRed, Orange, Yellow, Green, Turquoise, Sky, Sapphire,
+        private static Color[] colorList = new Color[25] { FaintRed, LightRed, Pink, Purple, Red, DarkRed, Orange, Yellow, Green, Turquoise, Sky, Sapphire,
                                                           Blue, Lavender, Text, SubText1, SubText2, MainSurface, Surface1, Surface2, MainOverlay, Overlay1,
-                                                          Overlay2 };
+                                                          Overlay2, Black, White };
 
         public static Color FaintRed = Color.FromArgb(245, 224, 220);
         public static Color LightRed = Color.FromArgb(242, 205, 205);
@@ -46,6 +48,9 @@ namespace GlowOS.Core
         public static Color Overlay1 = Color.FromArgb(127, 132, 156);
         public static Color Overlay2 = Color.FromArgb(147, 153, 178);
 
+        public static Color Black = Color.FromArgb(17, 17, 27);
+        public static Color White = Overlay2;
+
         public static void ChangeTheme(GlowTheme changeTo)
         {
             if (currentTheme == changeTo)
@@ -54,6 +59,7 @@ namespace GlowOS.Core
             Color mainOverlay = MainOverlay;
             Color overlay1 = Overlay1;
             Color overlay2 = Overlay2;
+            Color black = Black;
 
             MainOverlay = MainSurface;
             Overlay1 = Surface1;
@@ -62,6 +68,9 @@ namespace GlowOS.Core
             MainSurface = mainOverlay;
             Surface1 = overlay1;
             Surface2 = overlay2;
+
+            Black = overlay2;
+            White = black;
         }
 
     }
@@ -103,6 +112,9 @@ namespace GlowOS.Core
 
         MainOverlay,
         Overlay1,
-        Overlay2
+        Overlay2,
+
+        Black,
+        White
     }
 }
