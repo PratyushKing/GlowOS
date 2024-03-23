@@ -1,5 +1,4 @@
-# GlowOS
-## A fast, stable and decent OS powered via Cosmos.
+# GlowOS<br><sup>A fast, stable and decent OS powered via Cosmos.</sup>
 
 ## Features:
 - Stable GUI
