@@ -12,7 +12,9 @@ namespace GlowOS.Core
         public static List<Process> runningProcesses = new()
         {
             new BaseSystemProcesses.GlowOSSystem(), // the pid must be 0 as its the base process.
-            new BaseSystemProcesses.GlowOSMouseHandler()
+            new BaseSystemProcesses.GlowOSMouseHandler(),
+            new BaseSystemProcesses.GlowOSDesktopUI(),
+            new BaseSystemProcesses.GGLRenderer()
         };
 
         public static int GetCurrentPID
@@ -81,7 +83,12 @@ namespace GlowOS.Core
             public override void Running()
             {
                 Kernel.framesCount++;
-                Heap.Collect();
+
+                if (Kernel.framesCount >= 20)
+                {
+                    Heap.Collect();
+                    Kernel.framesCount = 0;
+                }
             }
         }
 
@@ -112,6 +119,33 @@ namespace GlowOS.Core
                 name = "GlowOS_DesktopUI";
                 description = "GlowOS_DesktopUI includes handling the top and bottom menu.";
                 pid = 2; // the pid's needed to be hard-coded due to the process list being generated before the the variable
+            }
+
+            public override void Initialize()
+            {
+                base.Initialize();
+            }
+
+            public override void Running()
+            {
+                base.Running();
+            }
+        }
+
+        public class GGLRenderer : Process
+        {
+            public GGLRenderer()
+            {
+                name = "GGLRenderer";
+                description = "Loads all registered GlowCanvas instances.";
+                pid = 3;
+            }
+
+            public override void Initialize() { }
+
+            public override void Running()
+            {
+                // GGL.Render();
             }
         }
     }
