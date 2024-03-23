@@ -113,9 +113,6 @@ namespace GlowOS
 
         public static int LastS = -1;
         public static int Ticken = 0;
-
-        public static int useMode = 0;
-
         public static void Update()
         {
             if (LastS == -1)
